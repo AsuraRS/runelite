@@ -261,4 +261,24 @@ public interface MenuEntrySwapperConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "shiftSwapKnock",
+		name = "Shift Knock-Out",
+		description = "Moves Knock-out option to the top when shift is held."
+	)
+	default boolean shiftSwapKnock()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "swapConstruction",
+		name = "Left Click Construction",
+		description = "Moves Build and Remove to the top of the menu."
+	)
+	default boolean swapConstruction()
+	{
+		return true;
+	}
 }

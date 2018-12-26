@@ -27,6 +27,8 @@ package net.runelite.client.plugins.menuentryswapper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -345,6 +347,33 @@ public class MenuEntrySwapperPlugin extends Plugin
 			&& NPC_MENU_TYPES.contains(MenuAction.of(event.getType())))
 		{
 			return;
+		}
+
+		MenuEntry[] entries = client.getMenuEntries();
+		if(searchIndex(entries, option, target, true) == entries.length - 1) {
+			if(config.swapPickpocket() && !shiftModifier) {
+				swap("pickpocket", option, target, true);
+			}
+
+			if (config.shiftSwapKnock() && shiftModifier)
+			{
+				swap("knock-out", option, target, true);
+			}
+		}
+
+		if(config.swapConstruction())
+		{
+			MenuEntry[] customEntries = new MenuEntry[1];
+			Optional<MenuEntry> buildEntry = Arrays.stream(entries).filter(entry -> Text.removeTags(entry.getOption()).toLowerCase().equals("build")).findFirst();
+			Optional<MenuEntry> removeEntry = Arrays.stream(entries).filter(entry -> Text.removeTags(entry.getOption()).toLowerCase().equals("remove")).findFirst();
+			buildEntry.ifPresent(menuEntry -> {
+				customEntries[0] = menuEntry;
+				client.setMenuEntries(customEntries);
+			});
+			removeEntry.ifPresent(menuEntry -> {
+				customEntries[0] = menuEntry;
+				client.setMenuEntries(customEntries);
+			});
 		}
 
 		if (option.equals("talk-to"))
